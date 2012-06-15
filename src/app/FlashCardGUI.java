@@ -32,7 +32,7 @@ public class FlashCardGUI {
 	private JLabel titleLabel;
 	private JLabel categoryLabel;
 	private JLabel vocabLabel;
-	//private JComboBox sectionBox;
+	private JComboBox sectionBox;
 	private JButton next;
 	private JButton swap;
 	
@@ -40,7 +40,7 @@ public class FlashCardGUI {
 	private FlashCard currentCard;
 	private List<FlashCard> allPairs;
 	private boolean showAnswer;
-	//private String currentSection;
+	private String currentSection;
 	
 	private List<String> sections;
 	
@@ -56,7 +56,7 @@ public class FlashCardGUI {
 		allPairs = new LinkedList<FlashCard>();
 		this.showAnswer = false;
 		sections = fcm.getAllSections();
-		//currentSection = "all";
+		currentSection = "all";
 		
 		frame = new JFrame("Flash Cards");
 		frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
@@ -77,15 +77,23 @@ public class FlashCardGUI {
 		next = new JButton("Next");
 		swap = new JButton("Swap");
 		
-		/*sectionBox = new JComboBox(convertList(sections));
+		sectionBox = new JComboBox(listToArray(sections));
 		sectionBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				currentSection = sections.get(sectionBox.getSelectedIndex());
+				int index = sectionBox.getSelectedIndex();
+				currentSection = sections.get(index);
 				
+				vocabLabel.setText(" ");
+				
+				if (index == 0) {
+					allPairs = fcm.getPairsForSection(fcm.getAllSections());
+				} else {
+					allPairs = fcm.getPairsForSection(currentSection);
+				}
 			}
-		});*/
+		});
 		
-		allPairs = fcm.getPairsForSections(sections);
+		allPairs = fcm.getPairsForSection(sections);
 		
 		next.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -125,31 +133,49 @@ public class FlashCardGUI {
 		buttonPanel.add(next);
 		buttonPanel.add(swap);
 		
-		JPanel labelPanel = new JPanel();
-		labelPanel.setLayout(new BorderLayout());
+		JPanel topPanel = new JPanel();
+		topPanel.setLayout(new GridLayout(0, 1));
 		
-		labelPanel.add(categoryLabel, BorderLayout.NORTH);
+		//JPanel labelPanel = new JPanel();
+		//labelPanel.setLayout(new BorderLayout());
+		
+		JPanel sectionPanel = new JPanel();
+		sectionPanel.setLayout(new FlowLayout());
+		
+		JLabel sectionTitle = new JLabel("Section:", JLabel.CENTER);
+		sectionPanel.add(sectionTitle);
+		sectionPanel.add(sectionBox);
+		
+		//labelPanel.add(categoryLabel, BorderLayout.NORTH);
+		
+		topPanel.add(titleLabel);
+		topPanel.add(categoryLabel);
+		topPanel.add(sectionPanel);
+		
 		//labelPanel.add(sectionBox);
-		labelPanel.add(vocabLabel);
+		//labelPanel.add(vocabLabel);
 		
-		frame.add(titleLabel, BorderLayout.NORTH);
-		frame.add(labelPanel);
+		//frame.add(titleLabel, BorderLayout.NORTH);
+		frame.add(topPanel, BorderLayout.NORTH);
+		//frame.add(labelPanel);
+		frame.add(vocabLabel);
 		frame.add(buttonPanel, BorderLayout.SOUTH);
 		
 		//frame.pack();
 		frame.setVisible(true);
 	}
-	/*
-	private String[] convertList(List<String> sections) {
-		String[] sectionArray = new String[sections.size()];
+	
+	private String[] listToArray(List<String> sections) {
+		String[] sectionArray = new String[sections.size() + 1];
 		
-		int i = 0;
+		int i = 1;
+		sectionArray[0] = "All";
 		for (String section : sections) {
 			sectionArray[i++] = section;
 		}
 		
 		return sectionArray;
-	}*/
+	}
 }
 
 

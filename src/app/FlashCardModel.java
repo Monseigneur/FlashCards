@@ -49,7 +49,19 @@ public class FlashCardModel {
 		return list;
 	}
 	
-	public List<FlashCard> getPairsForSections(List<String> sections) {
+	public List<FlashCard> getPairsForSection(String sectionName) {
+		List<FlashCard> wordPairs = new LinkedList<FlashCard>();
+		
+		if (vocabMap.containsKey(sectionName)) {
+			// TODO fix to unmodifiable
+			wordPairs = vocabMap.get(sectionName);
+		}
+		
+		return wordPairs;
+	}
+	
+	// TODO fix
+	public List<FlashCard> getPairsForSection(List<String> sections) {
 		List<FlashCard> wordPairs = new LinkedList<FlashCard>();
 		
 		for (String section : sections) {
@@ -75,7 +87,7 @@ public class FlashCardModel {
 			while (fileScanner.hasNextLine()) {
 				String wholeLine = fileScanner.nextLine().trim();
 
-				if (!wholeLine.startsWith(COMMENT_MARK)) {	// not a "comment"
+				if (!wholeLine.startsWith(COMMENT_MARK) && wholeLine.length() > 0) {	// not a "comment"
 					if (!headerLineFound) {
 						String[] headerParts = wholeLine.split(DELIMITER);
 						firstType = headerParts[0].trim();

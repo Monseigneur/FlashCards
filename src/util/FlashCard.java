@@ -10,6 +10,6 @@ public class FlashCard {
 	}	
 	
 	public String toString() {
-		return "{" + front + " == " + back + "}";	
+		return "{}"; //"{" + front + " == " + back + "}";	
 	}
 }
