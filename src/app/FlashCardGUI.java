@@ -8,7 +8,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-import util.WordPair;
+import util.FlashCard;
 
 /**
  * Simple GUI flash card program
@@ -37,8 +37,8 @@ public class FlashCardGUI {
 	private JButton swap;
 	
 	private boolean swapped;
-	private WordPair current;
-	private List<WordPair> allPairs;
+	private FlashCard currentCard;
+	private List<FlashCard> allPairs;
 	private boolean showAnswer;
 	//private String currentSection;
 	
@@ -52,8 +52,8 @@ public class FlashCardGUI {
 	public FlashCardGUI(FlashCardModel model) {
 		this.fcm = model;
 		this.swapped = false;
-		current = null;
-		allPairs = new LinkedList<WordPair>();
+		currentCard = null;
+		allPairs = new LinkedList<FlashCard>();
 		this.showAnswer = false;
 		sections = fcm.getAllSections();
 		//currentSection = "all";
@@ -93,7 +93,7 @@ public class FlashCardGUI {
 				if (!showAnswer) {
 					header = "Q: ";
 					int index = rand.nextInt(allPairs.size());
-					current = allPairs.get(index);
+					currentCard = allPairs.get(index);
 					showAnswer = true;
 				} else {
 					header = "A: ";
@@ -103,7 +103,7 @@ public class FlashCardGUI {
 				// T		F	T
 				// F		T	F
 				// xor
-				String result = (swapped != showAnswer) ? current.firstWord : current.secondWord;
+				String result = (swapped != showAnswer) ? currentCard.front : currentCard.back;
 				vocabLabel.setText("<html>" + header + result + "</html>");
 			}
 		});

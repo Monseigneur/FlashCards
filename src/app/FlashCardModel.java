@@ -2,7 +2,7 @@ package app;
 import java.util.*;
 import java.io.*;
 
-import util.WordPair;
+import util.FlashCard;
 
 public class FlashCardModel {
 	public static String COMMENT_MARK = "#";
@@ -11,7 +11,7 @@ public class FlashCardModel {
 	
 	private String fileName;
 	
-	private Map<String, List<WordPair>> vocabMap;
+	private Map<String, List<FlashCard>> vocabMap;
 	
 	private String firstType;
 	private String secondType;
@@ -19,14 +19,22 @@ public class FlashCardModel {
 	public FlashCardModel(String fileName) {
 		this.fileName = fileName;
 		
-		vocabMap = new TreeMap<String, List<WordPair>>();
+		vocabMap = new TreeMap<String, List<FlashCard>>();
 		getData();
 	}
 	
+	/**
+	 * Return the first category of the FlashCard
+	 * @return the first category
+	 */
 	public String getFirstType() {
 		return firstType;
 	}
 	
+	/**
+	 * Return the second category of the FlashCard
+	 * @return the second category
+	 */
 	public String getSecondType() {
 		return secondType;	
 	}
@@ -41,14 +49,14 @@ public class FlashCardModel {
 		return list;
 	}
 	
-	public List<WordPair> getPairsForSections(List<String> sections) {
-		List<WordPair> wordPairs = new LinkedList<WordPair>();
+	public List<FlashCard> getPairsForSections(List<String> sections) {
+		List<FlashCard> wordPairs = new LinkedList<FlashCard>();
 		
 		for (String section : sections) {
-			List<WordPair> sectionPairs = vocabMap.get(section);
+			List<FlashCard> sectionPairs = vocabMap.get(section);
 			
 			if (sectionPairs != null) {
-				for (WordPair wp : sectionPairs) {
+				for (FlashCard wp : sectionPairs) {
 					wordPairs.add(wp);	
 				}	
 			}	
@@ -63,7 +71,7 @@ public class FlashCardModel {
 			
 			boolean headerLineFound = false;
 			
-			String currentSection = "none";
+			String currentSection = "";
 			while (fileScanner.hasNextLine()) {
 				String wholeLine = fileScanner.nextLine().trim();
 
@@ -81,11 +89,11 @@ public class FlashCardModel {
 							
 							// If not already in the map, add a new section
 							if (!vocabMap.containsKey(currentSection)) {
-								vocabMap.put(lineParts[0], new LinkedList<WordPair>());
+								vocabMap.put(lineParts[0], new LinkedList<FlashCard>());
 							}
 						} else if (lineParts.length == 2) {
 							// 	word pairs
-							WordPair wp = new WordPair(lineParts[0], lineParts[1]);
+							FlashCard wp = new FlashCard(lineParts[0], lineParts[1]);
 							vocabMap.get(currentSection).add(wp);
 						}
 					}
