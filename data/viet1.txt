@@ -1,0 +1,124 @@
+# Vietnamese - English vocabulary file
+# Formatted like this:
+# A:B			// The two categories of the flash cards
+# C				// Arbitrary section header
+# d:e			// Word pairs (as many as needed)
+# …				
+# F				// Next section heading
+#
+Vietnamese:English
+Other
+Chapter 19
+chú rể: groom
+chủ hôn: MC
+cô dâu: bride
+cưới: to wed
+đi ăn tiệc cưới: attend a wedding banquet
+đón dâu: bring bride home
+gia tiên: ancestors
+hôn lễ: wedding ceremony
+làm mối: make a match
+lễ: ceremony
+lễ hỏi/đính hôn: engagement ceremony
+lễ vật: offerings
+người mối: matchmaker
+nhà gái: bride's family
+nhà trai: groom's family
+phù dâu: bridesmaid
+phù rể: best man
+hôn nhân: marriage
+thầy bói: fortuneteller
+thiếp cưới: wedding announcement
+tiệc cưới: wedding banquet
+trầu cau: betel leaf and areca nut
+cáo phó: obituary
+chia buồn: offer condolences
+chôn: bury
+cử hành: take place
+đám ma / đám tang: funeral
+để tang: be in mourning
+giỗ: death anniversary
+hoả táng: cremate
+khăn tang: mourning headband
+nghĩa địa: cemetary
+phúng: offer wreath and ritual objects
+qua đời: mất: pass away
+tang phục: mourning clothes
+gần đất, xa trời: verge of death
+sống chết có số: life and death are a matter of fate
+Chapter 21
+ao: pond
+bãi biển: beach
+bờ biển: shore
+cao nguyên: highlands
+cát: sand
+đá: stone
+đảo: island
+đất: earth
+đất liền: inland
+đồi: hill
+đồng: field
+đồng bằng: plain, delta
+hồ: lake
+ruộng: ricefield
+rừng: forest
+sông: river
+suối: spring
+thác: waterfall
+vịnh: bay
+Ấn Độ Dương: Indian ocean
+Bắc Cực: North Pole
+Đại Tây Dương: Atlantic Ocean
+đất: earth
+Địa Tây Dương: mediterranean
+động đất: earthquake
+gió lốc: tornado
+không gian: space
+mặt trăng: moon
+mặt trời: sun
+nam cực: south pole
+ô nhiễm: pollution
+sao: star
+Thái Bình Dương: pacific ocean
+vũ trụ: universe
+xích đạo: equator
+animal + cái: female animal
+animal + con: young animal
+animal + đực: male animal
+bird + mái: female bird
+bird + trống: male bird
+bird + con: young bird
+chim bồ câu: pigeon, dove
+chuột: mouse, rat
+cò: crane
+dê: goat
+dia súc: domestic animals
+hổ / cọp: tiger
+khỉ: monkey
+nai: deer
+ngựa: horse
+nuôi: to raise
+thỏ: rabbit
+trâu: water buffalo
+voi: elephant
+vườn bách thú
+cây cau: areca nut tree
+cây dừa: coconut tree
+cây đa: banyan tree
+cây thông: pine tree
+cây tre: bamboo
+cây trúc: yellow bamboo
+cỏ: grass
+hếo / tàn: to wither
+hoa: flower
+hoa cúc: chrysanthemum, daisy
+hoa hồng: rose
+hoa lan: orchid
+hoa sen: lotus
+lá: leaf
+mọc: to grow
+lá rơi: to fall
+trồng: to plant
+lên voi, xuống chó: life's ups and down
+ông nói gà, bà nói vịt: people not communicating well
+tấc đất tấc vàng: inch of land - gold
