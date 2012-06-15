@@ -1,14 +1,12 @@
 package app;
+
 import java.util.*;
 import java.io.*;
 
 import util.FlashCard;
+import util.Constants;
 
 public class FlashCardModel {
-	public static String COMMENT_MARK = "#";
-	public static String DELIMITER = ":";
-	public static String FILE_ENCODING = "UTF-8";
-	
 	private String fileName;
 	
 	private Map<String, List<FlashCard>> vocabMap;
@@ -79,7 +77,7 @@ public class FlashCardModel {
 	
 	private void getData() {
 		try {
-			Scanner fileScanner = new Scanner(new File(fileName), FILE_ENCODING);
+			Scanner fileScanner = new Scanner(new File(fileName), Constants.FILE_ENCODING);
 			
 			boolean headerLineFound = false;
 			
@@ -87,14 +85,14 @@ public class FlashCardModel {
 			while (fileScanner.hasNextLine()) {
 				String wholeLine = fileScanner.nextLine().trim();
 
-				if (!wholeLine.startsWith(COMMENT_MARK) && wholeLine.length() > 0) {	// not a "comment"
+				if (!wholeLine.startsWith(Constants.COMMENT_MARK) && wholeLine.length() > 0) {	// not a "comment"
 					if (!headerLineFound) {
-						String[] headerParts = wholeLine.split(DELIMITER);
+						String[] headerParts = wholeLine.split(Constants.DELIMITER);
 						firstType = headerParts[0].trim();
 						secondType = headerParts[1].trim();
 						headerLineFound = true;
 					} else {
-						String[] lineParts = wholeLine.split(DELIMITER);	
+						String[] lineParts = wholeLine.split(Constants.DELIMITER);	
 						if (lineParts.length == 1) {
 							// new section header
 							currentSection = lineParts[0];

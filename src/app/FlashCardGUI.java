@@ -1,14 +1,15 @@
 package app;
 import java.util.List;
 import java.util.LinkedList;
-import java.util.Random;
-import java.io.*;
-import java.util.Scanner;
+//import java.util.Random;
+//import java.io.*;
+//import java.util.Scanner;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
 import util.FlashCard;
+import util.Constants;
 
 /**
  * Simple GUI flash card program
@@ -21,8 +22,9 @@ import util.FlashCard;
  */
 
 public class FlashCardGUI {
-	private static final String fileName = "data/test.txt";
-	public static final Random rand = new Random();
+	private static final String fileName = "data/viet.txt";
+	//public static final Random rand = new Random();
+	
 	
 	private FlashCardModel fcm;
 	
@@ -40,11 +42,17 @@ public class FlashCardGUI {
 	private FlashCard currentCard;
 	private List<FlashCard> allPairs;
 	private boolean showAnswer;
-	private String currentSection;
+	//private String currentSection;
 	
 	private List<String> sections;
 	
 	public static void main(String[] args) {
+		try {
+            // Set cross-platform Java L&F (also called "Metal")
+			UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+		} catch (Exception ex) {}
+		
+		
 		FlashCardModel fcm = new FlashCardModel(fileName);
 		new FlashCardGUI(fcm);		
 	}
@@ -56,7 +64,7 @@ public class FlashCardGUI {
 		allPairs = new LinkedList<FlashCard>();
 		this.showAnswer = false;
 		sections = fcm.getAllSections();
-		currentSection = "all";
+		//currentSection = "all";
 		
 		frame = new JFrame("Flash Cards");
 		frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
@@ -65,13 +73,13 @@ public class FlashCardGUI {
 		
 		titleLabel = new JLabel(fcm.getFirstType() + " - " + fcm.getSecondType(), JLabel.CENTER);
 		Font font = titleLabel.getFont();
-		titleLabel.setFont(new Font(font.getFontName(), font.getStyle(), 16));
+		titleLabel.setFont(new Font(font.getFontName(), font.getStyle(), Constants.TITLE_SIZE));
 		
 		
 		String startType = swapped ? fcm.getSecondType() : fcm.getFirstType();
 		categoryLabel = new JLabel(startType, JLabel.CENTER);
 		vocabLabel = new JLabel(" ", JLabel.CENTER);
-		vocabLabel.setFont(new Font(font.getFontName(), font.getStyle(), 18));
+		vocabLabel.setFont(new Font(font.getFontName(), font.getStyle(), Constants.VOCAB_SIZE));
 		vocabLabel.setPreferredSize(new Dimension(1,1));
 		
 		next = new JButton("Next");
@@ -81,14 +89,13 @@ public class FlashCardGUI {
 		sectionBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int index = sectionBox.getSelectedIndex();
-				currentSection = sections.get(index);
-				
 				vocabLabel.setText(" ");
 				
 				if (index == 0) {
 					allPairs = fcm.getPairsForSection(fcm.getAllSections());
 				} else {
-					allPairs = fcm.getPairsForSection(currentSection);
+					//currentSection = sections.get(index-1);
+					allPairs = fcm.getPairsForSection(sections.get(index - 1));
 				}
 			}
 		});
@@ -100,7 +107,7 @@ public class FlashCardGUI {
 				String header;
 				if (!showAnswer) {
 					header = "Q: ";
-					int index = rand.nextInt(allPairs.size());
+					int index = Constants.rand.nextInt(allPairs.size());
 					currentCard = allPairs.get(index);
 					showAnswer = true;
 				} else {
@@ -136,9 +143,6 @@ public class FlashCardGUI {
 		JPanel topPanel = new JPanel();
 		topPanel.setLayout(new GridLayout(0, 1));
 		
-		//JPanel labelPanel = new JPanel();
-		//labelPanel.setLayout(new BorderLayout());
-		
 		JPanel sectionPanel = new JPanel();
 		sectionPanel.setLayout(new FlowLayout());
 		
@@ -146,18 +150,11 @@ public class FlashCardGUI {
 		sectionPanel.add(sectionTitle);
 		sectionPanel.add(sectionBox);
 		
-		//labelPanel.add(categoryLabel, BorderLayout.NORTH);
-		
 		topPanel.add(titleLabel);
 		topPanel.add(categoryLabel);
 		topPanel.add(sectionPanel);
 		
-		//labelPanel.add(sectionBox);
-		//labelPanel.add(vocabLabel);
-		
-		//frame.add(titleLabel, BorderLayout.NORTH);
 		frame.add(topPanel, BorderLayout.NORTH);
-		//frame.add(labelPanel);
 		frame.add(vocabLabel);
 		frame.add(buttonPanel, BorderLayout.SOUTH);
 		
