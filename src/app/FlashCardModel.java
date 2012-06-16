@@ -7,75 +7,74 @@ import util.FlashCard;
 import util.Constants;
 
 public class FlashCardModel {
-	private String fileName;
-	
+	public String COMMENT_MARK;
+	public String DELIMITER;
+
+	private String title;
+		
+	// New fields
 	private Map<String, List<FlashCard>> vocabMap;
+	private Map<String, FlashCard> sectionSides;
 	
-	private String firstType;
-	private String secondType;
+	
+	public FlashCardModel() {
+		vocabMap = new TreeMap<String, List<FlashCard>>();
+		sectionSides = new TreeMap<String, FlashCard>();
+	}
 	
 	public FlashCardModel(String fileName) {
-		this.fileName = fileName;
-		
-		vocabMap = new TreeMap<String, List<FlashCard>>();
-		getData();
+		//this.fileName = fileName;
+		this();
+		getData(fileName);
+	}
+	
+	public String getTitle() {
+		return title;
 	}
 	
 	/**
 	 * Return the first category of the FlashCard
 	 * @return the first category
 	 */
-	public String getFirstType() {
-		return firstType;
+	public String getFirstType(String section) {
+		return sectionSides.get(section).front;
 	}
 	
 	/**
 	 * Return the second category of the FlashCard
 	 * @return the second category
 	 */
-	public String getSecondType() {
-		return secondType;	
+	public String getSecondType(String section) {
+		return sectionSides.get(section).back;
 	}
 	
-	public List<String> getAllSections() {
-		List<String> list = new LinkedList<String>();
-		
-		for (String section : vocabMap.keySet()) {
-			list.add(section);	
-		}	
-		
-		return list;
+	public Set<String> getAllSections() {
+		return vocabMap.keySet();
 	}
 	
-	public List<FlashCard> getPairsForSection(String sectionName) {
-		List<FlashCard> wordPairs = new LinkedList<FlashCard>();
-		
-		if (vocabMap.containsKey(sectionName)) {
-			// TODO fix to unmodifiable
-			wordPairs = vocabMap.get(sectionName);
-		}
-		
-		return wordPairs;
-	}
-	
-	// TODO fix
-	public List<FlashCard> getPairsForSection(List<String> sections) {
-		List<FlashCard> wordPairs = new LinkedList<FlashCard>();
-		
-		for (String section : sections) {
-			List<FlashCard> sectionPairs = vocabMap.get(section);
+	public FlashCard getCardFromSection(String section) {
+		if (section.equalsIgnoreCase("ALL")) {
+			int sectionIndex = Constants.rand.nextInt(vocabMap.keySet().size());
 			
-			if (sectionPairs != null) {
-				for (FlashCard wp : sectionPairs) {
-					wordPairs.add(wp);	
-				}	
-			}	
+			for (String s : vocabMap.keySet()) {
+				if (sectionIndex == 0) {
+					section = s;
+					break;
+				} else {
+					sectionIndex--;
+				}
+			}
 		}
-		
-		return wordPairs;
+		List<FlashCard> sectionDeck = vocabMap.get(section);
+		int cardIndex = Constants.rand.nextInt(sectionDeck.size());
+		return sectionDeck.get(cardIndex);
 	}
 	
-	private void getData() {
+	public void changeFile(String fileName) {
+		// TODO
+	}
+	
+	private void getData(String fileName) {
 		try {
 			Scanner fileScanner = new Scanner(new File(fileName), Constants.FILE_ENCODING);
 			
@@ -85,30 +84,36 @@ public class FlashCardModel {
 			while (fileScanner.hasNextLine()) {
 				String wholeLine = fileScanner.nextLine().trim();
 
-				if (!wholeLine.startsWith(Constants.COMMENT_MARK) && wholeLine.length() > 0) {	// not a "comment"
+				if (wholeLine.length() > 0) {
 					if (!headerLineFound) {
-						String[] headerParts = wholeLine.split(Constants.DELIMITER);
-						firstType = headerParts[0].trim();
-						secondType = headerParts[1].trim();
+						// header line
+						String[] constants = wholeLine.split(" ");
+						COMMENT_MARK = constants[0].substring(7);
+						DELIMITER = constants[1].substring(9);
 						headerLineFound = true;
-					} else {
-						String[] lineParts = wholeLine.split(Constants.DELIMITER);	
+					} else if (!wholeLine.startsWith(COMMENT_MARK)) {
+						String[] lineParts = wholeLine.split(DELIMITER);
+						
 						if (lineParts.length == 1) {
-							// new section header
-							currentSection = lineParts[0];
-							
-							// If not already in the map, add a new section
-							if (!vocabMap.containsKey(currentSection)) {
-								vocabMap.put(lineParts[0], new LinkedList<FlashCard>());
-							}
+							// Title
+							title = lineParts[0];
 						} else if (lineParts.length == 2) {
-							// 	word pairs
-							FlashCard wp = new FlashCard(lineParts[0], lineParts[1]);
-							vocabMap.get(currentSection).add(wp);
+							// FlashCard
+							FlashCard fc = new FlashCard(currentSection, lineParts[0], lineParts[1]);
+							vocabMap.get(currentSection).add(fc);
+						} else if (lineParts.length == 3) {
+							// Section heading
+							currentSection = lineParts[0].trim();
+							if (!vocabMap.containsKey(currentSection)) {
+								vocabMap.put(currentSection, new LinkedList<FlashCard>());
+								String f = lineParts[1].trim();
+								String g = lineParts[2].trim();
+								sectionSides.put(currentSection, new FlashCard(f, g));
+							}
 						}
 					}
 				}
 			}				
-		} catch (Exception ex) {} 
+		} catch (Exception ex) { ex.printStackTrace(); } 
 	}
 }

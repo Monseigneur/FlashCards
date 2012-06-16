@@ -1,6 +1,7 @@
 package app;
 import java.util.List;
 import java.util.LinkedList;
+import java.util.Set;
 //import java.util.Random;
 //import java.io.*;
 //import java.util.Scanner;
@@ -22,8 +23,8 @@ import util.Constants;
  */
 
 public class FlashCardGUI {
-	private static final String fileName = "data/viet.txt";
-	//public static final Random rand = new Random();
+	private static final String fileName = "data/test.txt";
+	private static final String ALL = "All";
 	
 	
 	private FlashCardModel fcm;
@@ -40,11 +41,10 @@ public class FlashCardGUI {
 	
 	private boolean swapped;
 	private FlashCard currentCard;
-	private List<FlashCard> allPairs;
-	private boolean showAnswer;
-	//private String currentSection;
-	
-	private List<String> sections;
+	//private List<FlashCard> allPairs;
+	private boolean showBackSide;
+	private String currentSection;
+	private boolean all;
 	
 	public static void main(String[] args) {
 		try {
@@ -52,87 +52,40 @@ public class FlashCardGUI {
 			UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
 		} catch (Exception ex) {}
 		
-		
 		FlashCardModel fcm = new FlashCardModel(fileName);
 		new FlashCardGUI(fcm);		
 	}
 	
 	public FlashCardGUI(FlashCardModel model) {
 		this.fcm = model;
-		this.swapped = false;
-		currentCard = null;
-		allPairs = new LinkedList<FlashCard>();
-		this.showAnswer = false;
-		sections = fcm.getAllSections();
-		//currentSection = "all";
+		initializeVariables();
 		
 		frame = new JFrame("Flash Cards");
 		frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
 		frame.setSize(new Dimension(300,300));
 		frame.setLayout(new BorderLayout());	
 		
-		titleLabel = new JLabel(fcm.getFirstType() + " - " + fcm.getSecondType(), JLabel.CENTER);
-		Font font = titleLabel.getFont();
-		titleLabel.setFont(new Font(font.getFontName(), font.getStyle(), Constants.TITLE_SIZE));
+		titleLabel = new JLabel(fcm.getTitle(), JLabel.CENTER);
+		titleLabel.setFont(Constants.TITLE_FONT);
 		
-		
-		String startType = swapped ? fcm.getSecondType() : fcm.getFirstType();
+		//String startType = swapped ? fcm.getSecondType(currentCard.section) : fcm.getFirstType(currentCard.section);
+		String startType = " ";
 		categoryLabel = new JLabel(startType, JLabel.CENTER);
 		vocabLabel = new JLabel(" ", JLabel.CENTER);
-		vocabLabel.setFont(new Font(font.getFontName(), font.getStyle(), Constants.VOCAB_SIZE));
+		vocabLabel.setFont(Constants.VOCAB_FONT);
 		vocabLabel.setPreferredSize(new Dimension(1,1));
 		
-		next = new JButton("Next");
-		swap = new JButton("Swap");
+		// Initialize objects
+		next = new JButton(Constants.NEXT_BUTTON_TEXT);
+		swap = new JButton(Constants.SWAP_BUTTON_TEXT);
+		sectionBox = new JComboBox(setToArray(fcm.getAllSections()));
 		
-		sectionBox = new JComboBox(listToArray(sections));
-		sectionBox.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				int index = sectionBox.getSelectedIndex();
-				vocabLabel.setText(" ");
-				
-				if (index == 0) {
-					allPairs = fcm.getPairsForSection(fcm.getAllSections());
-				} else {
-					//currentSection = sections.get(index-1);
-					allPairs = fcm.getPairsForSection(sections.get(index - 1));
-				}
-			}
-		});
-		
-		allPairs = fcm.getPairsForSection(sections);
-		
-		next.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				String header;
-				if (!showAnswer) {
-					header = "Q: ";
-					int index = Constants.rand.nextInt(allPairs.size());
-					currentCard = allPairs.get(index);
-					showAnswer = true;
-				} else {
-					header = "A: ";
-					showAnswer = false;
-				}
-				// S show	T	F
-				// T		F	T
-				// F		T	F
-				// xor
-				String result = (swapped != showAnswer) ? currentCard.front : currentCard.back;
-				vocabLabel.setText("<html>" + header + result + "</html>");
-			}
-		});
-		
-		swap.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				swapped = !swapped;
-				showAnswer = false;
-				String startType = swapped ? fcm.getSecondType() : fcm.getFirstType();
-
-				categoryLabel.setText(startType);
-				vocabLabel.setText(" ");
-			}
-		});
+		// Add listeners
+		next.addActionListener(new NextButtonListener());
+		next.setPreferredSize(new Dimension(70, 25));
+		swap.addActionListener(new SwapButtonListener());
+		swap.setPreferredSize(new Dimension(70, 25)); 
+		sectionBox.addActionListener(new SectionBoxListener());
 		
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new FlowLayout());
@@ -162,16 +115,77 @@ public class FlashCardGUI {
 		frame.setVisible(true);
 	}
 	
-	private String[] listToArray(List<String> sections) {
+	private String[] setToArray(Set<String> sections) {
 		String[] sectionArray = new String[sections.size() + 1];
 		
 		int i = 1;
-		sectionArray[0] = "All";
+		sectionArray[0] = ALL;
 		for (String section : sections) {
 			sectionArray[i++] = section;
 		}
 		
 		return sectionArray;
+	}
+	
+	private void initializeVariables() {
+		this.swapped = false;
+		this.all = true;
+		
+		this.currentSection = ALL;
+		this.currentCard = fcm.getCardFromSection(ALL);
+		//allPairs = new LinkedList<FlashCard>();
+		this.showBackSide = false;
+		//currentSection = "all";
+	}
+	
+	public class NextButtonListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			String header;
+			if (!showBackSide) {
+				header = "Q: ";
+				currentCard = fcm.getCardFromSection(currentSection);
+				showBackSide = true;
+				setCategoryLabelText();
+				next.setText(Constants.FLIP_BUTTON_TEXT);
+			} else {
+				header = "A: ";
+				showBackSide = false;
+				next.setText(Constants.NEXT_BUTTON_TEXT);
+			}
+			String result = (swapped != showBackSide) ? currentCard.front : currentCard.back;
+			vocabLabel.setText("<html>" + header + result + "</html>");
+		}
+	}
+	
+	public class SwapButtonListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			swapped = !swapped;
+			showBackSide = false;
+			setCategoryLabelText();
+			vocabLabel.setText(" ");
+		}
+	}
+	
+	public class SectionBoxListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			vocabLabel.setText(" ");
+			currentSection = (String) sectionBox.getSelectedItem();
+			currentCard = fcm.getCardFromSection(currentSection);
+			showBackSide = false;
+			
+			if (currentSection.equalsIgnoreCase(ALL)) {
+				categoryLabel.setText(" ");
+			} else {
+				// Label should be known
+				String startType = swapped ? fcm.getSecondType(currentSection) : fcm.getFirstType(currentSection);
+				//setCategoryLabelText();
+			}
+		}
+	}
+	
+	private void setCategoryLabelText() {
+		String startType = swapped ? fcm.getSecondType(currentCard.section) : fcm.getFirstType(currentCard.section);
+		categoryLabel.setText(startType);
 	}
 }
 
