@@ -1,0 +1,18 @@
+Model:
++getAllSections
++getCardFromSection
++getFirstType
++getSecondType
++getTitle
+
+
+
+Functionality
+Changing section:
+	reset buttons
+	
+Next / Flip
+	
+Swap
+
+

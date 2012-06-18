@@ -1,3 +1,4 @@
+comment# delimiter:
 # Vietnamese - English vocabulary file
 # Formatted like this:
 # A:B			// The two categories of the flash cards
@@ -6,15 +7,15 @@
 # …				
 # F				// Next section heading
 #
-Vietnamese:English
-Other
+Vietnamese Flashcards
+Other : Vietnamese : English
 góc: corner
 trên: above
 dưới: under
 ngưỡng mộ: admire
 nhóm: group
 chọn: choose
-Chapter 17
+Chapter 17 : Vietnamese : English
 bảo vệ luận án:to defend a thesis
 bằng:diploma / degree
 (bằng) cử nhân:bachelor's degree
@@ -33,7 +34,7 @@ tiểu học: elementary school
 trung học cơ sở: middle school
 (bằng) trung học phổ thông: high school diploma
 học ít mà tinh: learn a little but master it
-Chapter 17 II
+Chapter 17 II : Vietnamese : English
 địa lý: geography
 hoá học: chemistry
 hoá sinh: biochemistry
@@ -49,7 +50,7 @@ văn học: literary studies
 xã hội học: sociology
 y khoa: medicine
 lịch sử: history
-Chapter 17 III
+Chapter 17 III : Vietnamese : English
 bị đuổi: to be fired
 chủ nhân: employer
 dùng: to use
@@ -81,7 +82,7 @@ giám đốc: director
 trợ lý: assistant
 bị đuổi việc: to be fired
 bị sa thải: to be fired
-Chapter 18 I
+Chapter 18 I : Vietnamese : English
 ăn tết: to celebrate Tết
 âm lịch: lunar calendar
 bánh chưng: steamed sticky rice cake
@@ -101,7 +102,7 @@ mứt: candied fruits or vegetables
 thọ: to live long
 trang hoàng: to decorate
 tối như đêm ba mươi: pitch dark
-Chapter 19
+Chapter 19 : Vietnamese : English
 chú rể: groom
 chủ hôn: MC
 cô dâu: bride
@@ -139,7 +140,7 @@ qua đời: mất: pass away
 tang phục: mourning clothes
 gần đất, xa trời: verge of death
 sống chết có số: life and death are a matter of fate
-Chapter 21
+Chapter 21 : Vietnamese : English
 ao: pond
 bãi biển: beach
 bờ biển: shore
@@ -194,7 +195,7 @@ nuôi: to raise
 thỏ: rabbit
 trâu: water buffalo
 voi: elephant
-vườn bách thú
+vườn bách thú: zoo
 cây cau: areca nut tree
 cây dừa: coconut tree
 cây đa: banyan tree

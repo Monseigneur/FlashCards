@@ -1,6 +1,6 @@
 package app;
-import java.util.List;
-import java.util.LinkedList;
+//import java.util.List;
+//import java.util.LinkedList;
 import java.util.Set;
 //import java.util.Random;
 //import java.io.*;
@@ -23,8 +23,8 @@ import util.Constants;
  */
 
 public class FlashCardGUI {
-	private static final String fileName = "data/test.txt";
 	private static final String ALL = "All";
+	private static final String BLANK = "";
 	
 	
 	private FlashCardModel fcm;
@@ -39,12 +39,12 @@ public class FlashCardGUI {
 	private JButton next;
 	private JButton swap;
 	
+	private JButton file;
+	
 	private boolean swapped;
 	private FlashCard currentCard;
-	//private List<FlashCard> allPairs;
 	private boolean showBackSide;
 	private String currentSection;
-	private boolean all;
 	
 	public static void main(String[] args) {
 		try {
@@ -52,7 +52,7 @@ public class FlashCardGUI {
 			UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
 		} catch (Exception ex) {}
 		
-		FlashCardModel fcm = new FlashCardModel(fileName);
+		FlashCardModel fcm = new FlashCardModel();
 		new FlashCardGUI(fcm);		
 	}
 	
@@ -61,17 +61,15 @@ public class FlashCardGUI {
 		initializeVariables();
 		
 		frame = new JFrame("Flash Cards");
-		frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(new Dimension(300,300));
 		frame.setLayout(new BorderLayout());	
 		
+		// Create and initialize Labels
 		titleLabel = new JLabel(fcm.getTitle(), JLabel.CENTER);
 		titleLabel.setFont(Constants.TITLE_FONT);
-		
-		//String startType = swapped ? fcm.getSecondType(currentCard.section) : fcm.getFirstType(currentCard.section);
-		String startType = " ";
-		categoryLabel = new JLabel(startType, JLabel.CENTER);
-		vocabLabel = new JLabel(" ", JLabel.CENTER);
+		categoryLabel = new JLabel(BLANK, JLabel.CENTER);
+		vocabLabel = new JLabel(BLANK, JLabel.CENTER);
 		vocabLabel.setFont(Constants.VOCAB_FONT);
 		vocabLabel.setPreferredSize(new Dimension(1,1));
 		
@@ -80,6 +78,8 @@ public class FlashCardGUI {
 		swap = new JButton(Constants.SWAP_BUTTON_TEXT);
 		sectionBox = new JComboBox(setToArray(fcm.getAllSections()));
 		
+		file = new JButton("FILE");
+		
 		// Add listeners
 		next.addActionListener(new NextButtonListener());
 		next.setPreferredSize(new Dimension(70, 25));
@@ -87,11 +87,16 @@ public class FlashCardGUI {
 		swap.setPreferredSize(new Dimension(70, 25)); 
 		sectionBox.addActionListener(new SectionBoxListener());
 		
+		file.addActionListener(new FileButtonListener());
+		file.setPreferredSize(new Dimension(70, 25));
+		
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new FlowLayout());
 		
 		buttonPanel.add(next);
 		buttonPanel.add(swap);
+		
+		buttonPanel.add(file);
 		
 		JPanel topPanel = new JPanel();
 		topPanel.setLayout(new GridLayout(0, 1));
@@ -104,8 +109,8 @@ public class FlashCardGUI {
 		sectionPanel.add(sectionBox);
 		
 		topPanel.add(titleLabel);
-		topPanel.add(categoryLabel);
 		topPanel.add(sectionPanel);
+		topPanel.add(categoryLabel);
 		
 		frame.add(topPanel, BorderLayout.NORTH);
 		frame.add(vocabLabel);
@@ -129,13 +134,9 @@ public class FlashCardGUI {
 	
 	private void initializeVariables() {
 		this.swapped = false;
-		this.all = true;
-		
 		this.currentSection = ALL;
 		this.currentCard = fcm.getCardFromSection(ALL);
-		//allPairs = new LinkedList<FlashCard>();
 		this.showBackSide = false;
-		//currentSection = "all";
 	}
 	
 	public class NextButtonListener implements ActionListener {
@@ -145,7 +146,8 @@ public class FlashCardGUI {
 				header = "Q: ";
 				currentCard = fcm.getCardFromSection(currentSection);
 				showBackSide = true;
-				setCategoryLabelText();
+				String startType = swapped ? fcm.getSecondType(currentCard.section) : fcm.getFirstType(currentCard.section);
+				categoryLabel.setText(startType);
 				next.setText(Constants.FLIP_BUTTON_TEXT);
 			} else {
 				header = "A: ";
@@ -161,31 +163,45 @@ public class FlashCardGUI {
 		public void actionPerformed(ActionEvent e) {
 			swapped = !swapped;
 			showBackSide = false;
-			setCategoryLabelText();
-			vocabLabel.setText(" ");
+			String startType = BLANK;
+			if (!currentSection.equalsIgnoreCase(ALL)) {
+				startType = swapped ? fcm.getSecondType(currentSection) : fcm.getFirstType(currentSection);
+			}
+			categoryLabel.setText(startType);
+			vocabLabel.setText(BLANK);
+			next.setText(Constants.NEXT_BUTTON_TEXT);
 		}
 	}
 	
 	public class SectionBoxListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			vocabLabel.setText(" ");
+			vocabLabel.setText(BLANK);
 			currentSection = (String) sectionBox.getSelectedItem();
 			currentCard = fcm.getCardFromSection(currentSection);
 			showBackSide = false;
+			next.setText(Constants.NEXT_BUTTON_TEXT);
 			
 			if (currentSection.equalsIgnoreCase(ALL)) {
-				categoryLabel.setText(" ");
+				categoryLabel.setText(BLANK);
 			} else {
 				// Label should be known
 				String startType = swapped ? fcm.getSecondType(currentSection) : fcm.getFirstType(currentSection);
-				//setCategoryLabelText();
+				categoryLabel.setText(startType);
 			}
 		}
 	}
 	
-	private void setCategoryLabelText() {
-		String startType = swapped ? fcm.getSecondType(currentCard.section) : fcm.getFirstType(currentCard.section);
-		categoryLabel.setText(startType);
+	public class FileButtonListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			fcm.changeFile("data/viet.txt");
+			
+			// Set labels and combo boxes
+			titleLabel.setText(fcm.getTitle());
+			categoryLabel.setText(BLANK);
+			vocabLabel.setText(BLANK);
+			
+			sectionBox = new JComboBox(setToArray(fcm.getAllSections()));
+		}
 	}
 }
 

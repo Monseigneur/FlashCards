@@ -10,21 +10,24 @@ public class FlashCardModel {
 	public String COMMENT_MARK;
 	public String DELIMITER;
 
+	private String fileName;
+	
 	private String title;
+	
 		
 	// New fields
 	private Map<String, List<FlashCard>> vocabMap;
 	private Map<String, FlashCard> sectionSides;
 	
-	
+	/**
+	 * Default Constructor
+	 */
 	public FlashCardModel() {
 		vocabMap = new TreeMap<String, List<FlashCard>>();
 		sectionSides = new TreeMap<String, FlashCard>();
-	}
-	
-	public FlashCardModel(String fileName) {
-		//this.fileName = fileName;
-		this();
+		
+		fileName = "data/example.txt";
+		
 		getData(fileName);
 	}
 	
@@ -70,8 +73,15 @@ public class FlashCardModel {
 		return sectionDeck.get(cardIndex);
 	}
 	
-	public void changeFile(String fileName) {
-		// TODO
+	public void changeFile(String newFileName) {
+		if (!newFileName.equals(fileName)) {
+			fileName = newFileName;
+			
+			vocabMap.clear();
+			sectionSides.clear();
+			
+			getData(newFileName);
+		}
 	}
 	
 	private void getData(String fileName) {
