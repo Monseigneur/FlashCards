@@ -1,18 +1,9 @@
+A simple Flash Card application that reads data from text files stored in the "data" directory 
+and generates a deck of flash cards for that data.
+
 Model:
 +getAllSections
 +getCardFromSection
 +getFirstType
 +getSecondType
 +getTitle
-
-
-
-Functionality
-Changing section:
-	reset buttons
-	
-Next / Flip
-	
-Swap
-
-

@@ -1,13 +1,24 @@
 package util;
 
 import java.awt.Font;
+import java.io.File;
 import java.util.Random;
 
+/**
+ * Constants in a class that keeps track of useful constants for the
+ * FlashCard model and gui classes.
+ * 
+ * @author Milan Justel (milanj91)
+ *
+ */
 public class Constants {
-	// Constants for file stuff
-	//public static String COMMENT_MARK = "#";
-	//public static String DELIMITER = ":";
-	public static String FILE_ENCODING = "UTF-8";
+	public static final String FILE_ENCODING = "UTF-8";
+	
+	public static final String DATA_FILE_DIRECTORY = "data";
+	public static final String DEFAULT_FILE = DATA_FILE_DIRECTORY + File.separator + "default.txt";
+	
+	public static final String COMMENT_STRING = "comment";
+	public static final String DELIMITER_STRING = "delimiter";
 	
 	public static final Random rand = new Random();
 	

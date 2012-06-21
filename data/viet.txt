@@ -1,12 +1,6 @@
 comment# delimiter:
-# Vietnamese - English vocabulary file
-# Formatted like this:
-# A:B			// The two categories of the flash cards
-# C				// Arbitrary section header
-# d:e			// Word pairs (as many as needed)
-# …				
-# F				// Next section heading
-#
+# Start comment lines with "#" and separate values with ":"
+
 Vietnamese Flashcards
 Other : Vietnamese : English
 góc: corner
@@ -136,7 +130,7 @@ hoả táng: cremate
 khăn tang: mourning headband
 nghĩa địa: cemetary
 phúng: offer wreath and ritual objects
-qua đời: mất: pass away
+qua đời / mất: pass away
 tang phục: mourning clothes
 gần đất, xa trời: verge of death
 sống chết có số: life and death are a matter of fate

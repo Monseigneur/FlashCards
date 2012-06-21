@@ -18,7 +18,7 @@ import util.Constants;
  * 
  * Features to do:
  * 	- support writing into the file to add new words
- * 	- choosing different files to open with
+ * 	- feature to check if file is of a valid format
  *
  */
 
@@ -36,10 +36,9 @@ public class FlashCardGUI {
 	private JLabel categoryLabel;
 	private JLabel vocabLabel;
 	private JComboBox sectionBox;
+	private JComboBox fileBox;
 	private JButton next;
 	private JButton swap;
-	
-	private JButton file;
 	
 	private boolean swapped;
 	private FlashCard currentCard;
@@ -62,7 +61,7 @@ public class FlashCardGUI {
 		
 		frame = new JFrame("Flash Cards");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(new Dimension(300,300));
+		frame.setSize(new Dimension(300,400));
 		frame.setLayout(new BorderLayout());	
 		
 		// Create and initialize Labels
@@ -77,8 +76,7 @@ public class FlashCardGUI {
 		next = new JButton(Constants.NEXT_BUTTON_TEXT);
 		swap = new JButton(Constants.SWAP_BUTTON_TEXT);
 		sectionBox = new JComboBox(setToArray(fcm.getAllSections()));
-		
-		file = new JButton("FILE");
+		fileBox = new JComboBox(FlashCardModel.allDataFiles());
 		
 		// Add listeners
 		next.addActionListener(new NextButtonListener());
@@ -86,17 +84,13 @@ public class FlashCardGUI {
 		swap.addActionListener(new SwapButtonListener());
 		swap.setPreferredSize(new Dimension(70, 25)); 
 		sectionBox.addActionListener(new SectionBoxListener());
-		
-		file.addActionListener(new FileButtonListener());
-		file.setPreferredSize(new Dimension(70, 25));
+		fileBox.addActionListener(new FileBoxListener());
 		
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new FlowLayout());
 		
 		buttonPanel.add(next);
 		buttonPanel.add(swap);
-		
-		buttonPanel.add(file);
 		
 		JPanel topPanel = new JPanel();
 		topPanel.setLayout(new GridLayout(0, 1));
@@ -108,7 +102,15 @@ public class FlashCardGUI {
 		sectionPanel.add(sectionTitle);
 		sectionPanel.add(sectionBox);
 		
+		JPanel fileBoxPanel = new JPanel();
+		fileBoxPanel.setLayout(new FlowLayout());
+		
+		JLabel fileBoxTitle = new JLabel("File:", JLabel.CENTER);
+		fileBoxPanel.add(fileBoxTitle);
+		fileBoxPanel.add(fileBox);
+		
 		topPanel.add(titleLabel);
+		topPanel.add(fileBoxPanel);
 		topPanel.add(sectionPanel);
 		topPanel.add(categoryLabel);
 		
@@ -191,36 +193,18 @@ public class FlashCardGUI {
 		}
 	}
 	
-	public class FileButtonListener implements ActionListener {
+	public class FileBoxListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			fcm.changeFile("data/viet.txt");
+			String newFileName = (String) fileBox.getSelectedItem();
+			fcm.changeFile(newFileName);
 			
 			// Set labels and combo boxes
 			titleLabel.setText(fcm.getTitle());
 			categoryLabel.setText(BLANK);
 			vocabLabel.setText(BLANK);
 			
-			sectionBox = new JComboBox(setToArray(fcm.getAllSections()));
+			//sectionBox = new JComboBox(setToArray(fcm.getAllSections()));
+			sectionBox.setModel(new JComboBox(setToArray(fcm.getAllSections())).getModel());
 		}
 	}
 }
-
-
-/*
- * file choosing stuff, this finds and makes a list of the files in the directory
- * how do we have a combo box to choose a file before starting up the main program??
- * 
-try {
-File vocabDirectory = new File("vocab");
-if (vocabDirectory.isDirectory()) {
-	String[] names = vocabDirectory.list();
-	for (String s : names) {
-		System.out.println(s);	
-		File text = new File(s);
-		System.out.println(text.getCanonicalPath());
-	}
-	//File text = new File(names[0]);
-	
-}
-} catch (Exception e) {}
-*/

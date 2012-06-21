@@ -1,0 +1,23 @@
+comment# delimiter:
+# Sample flash card data file
+#
+# Lines starting with "#" are comment lines that are ignored 
+# The header line consists of two categories separated by a delimiter
+# Section names must not include the delimiter
+# Flash card information is stored with a delimiter between the two parts
+# 
+# CATEGORY1 : CATEGORY2
+# SECTION1
+# FRONT11 : BACK11
+# FRONT12 : BACK12
+# SECTION2
+# FRONT21 : BACK21
+# 
+#
+Default File
+Section_1 : Section_1_front : Section_1_back
+s1f1 : s1b1
+s1f2 : s1b2
+Section_2 : Section_2_front : Section_2_back
+s2f1 : s2b1
+s2f2 : s2b2
